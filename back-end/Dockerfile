@@ -3,8 +3,8 @@ FROM composer:2 AS vendor
 
 WORKDIR /app
 COPY composer.json composer.lock ./
-# Instala SÓ dependências de produção
-RUN composer install --no-dev --no-interaction --no-scripts --no-autoloader --prefer-dist
+# (Aquele --no-autoloader estava errado, removi ele também)
+RUN composer install --no-dev --no-interaction --no-scripts --prefer-dist
 
 # --- Estágio 2: Imagem Base (PHP + Apache) ---
 FROM php:8.2-apache
@@ -28,13 +28,17 @@ COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 # --- Estágio 3: Aplicação ---
 WORKDIR /var/www/html
 
+# <<< LINHA NOVA ABAIXO! <<<
+# Copia o executável do Composer do primeiro estágio
+COPY --from=vendor /usr/bin/composer /usr/bin/composer
+
 # Copia as dependências do Estágio 1
 COPY --from=vendor /app/vendor/ ./vendor/
 
 # Copia o resto do código do Laravel
 COPY . .
 
-# Gera o autoloader otimizado do Composer
+# Gera o autoloader otimizado do Composer (AGORA VAI FUNCIONAR)
 RUN composer dump-autoload --no-dev --optimize
 
 # Ajusta permissões
