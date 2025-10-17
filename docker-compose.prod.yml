@@ -19,7 +19,7 @@ services:
   # Serviço 2: Frontend (Next.js Otimizado)
   frontend:
     build:
-      context: ./frontend
+      context: ./front-end
       dockerfile: Dockerfile
     container_name: nextjs_prod
     command: node server.js # Roda o servidor otimizado
@@ -30,14 +30,14 @@ services:
   # Serviço 3: Backend (Laravel + Apache)
   backend:
     build:
-      context: ./backend
+      context: ./back-end
       dockerfile: Dockerfile
     container_name: laravel_prod
     env_file:
       - ./.env # Passa senhas
-      - ./backend/.env # Passa config do Laravel (mas o DB_HOST='db' está lá)
+      - ./back-end/.env # Passa config do Laravel (mas o DB_HOST='db' está lá)
     volumes:
-      - ./backend/storage:/var/www/html/storage # Persiste uploads/logs
+      - ./back-end/storage:/var/www/html/storage # Persiste uploads/logs
     networks:
       - trello_network
     depends_on:

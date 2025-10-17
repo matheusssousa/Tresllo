@@ -4,12 +4,12 @@ services:
   # Serviço 1: Frontend (Next.js)
   frontend:
     build:
-      context: ./frontend
+      context: ./front-end
       # Não usa o Dockerfile de produção, só instala dependências
       target: deps
     container_name: nextjs_dev
     volumes:
-      - ./frontend:/app # Espelha seu código
+      - ./front-end:/app # Espelha seu código
       - /app/node_modules # Não espelha node_modules
     command: npm run dev # Roda o servidor de dev
     ports:
@@ -20,12 +20,12 @@ services:
   # Serviço 2: Backend (Laravel)
   backend:
     build:
-      context: ./backend
+      context: ./back-end
       # Usa o estágio 'vendor' do Dockerfile para instalar composer
       target: vendor
     container_name: laravel_dev
     volumes:
-      - ./backend:/app # Espelha seu código
+      - ./back-end:/app # Espelha seu código
     command: php artisan serve --host=0.0.0.0 --port=8000 # Roda o servidor de dev
     ports:
       - "8000:8000"
