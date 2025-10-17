@@ -1,0 +1,15 @@
+# Ignorar arquivos de ambiente (SENHAS!)
+.env
+backend/.env
+frontend/.env.local
+frontend/.env
+
+# Ignorar dependências
+/node_modules/
+/frontend/node_modules/
+/frontend/.next/
+/backend/vendor/
+
+# Caches
+__pycache__/
+*.pyc
